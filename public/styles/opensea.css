@@ -1,0 +1,167 @@
+/* OpenSea-inspired styles */
+:root {
+  --primary-color: #2081e2;
+  --secondary-color: #353840;
+  --background-color: #202225;
+  --card-background: #303339;
+  --text-primary: #ffffff;
+  --text-secondary: #8a939b;
+  --accent-color: #1868b7;
+  --border-color: #151b22;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  font-family: 'Poppins', sans-serif;
+}
+
+.header {
+  background-color: var(--card-background);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nav-menu a {
+  color: var(--text-secondary);
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+  color: var(--primary-color);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-color);
+}
+
+.marketplace-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.nft-card {
+  background-color: var(--card-background);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+}
+
+.nft-card:hover {
+  transform: translateY(-2px);
+}
+
+.nft-image {
+  position: relative;
+  padding-top: 100%;
+  background-color: var(--background-color);
+}
+
+.nft-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.nft-card:hover .nft-image img {
+  transform: scale(1.05);
+}
+
+.nft-info {
+  padding: 16px;
+}
+
+.nft-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.nft-creator {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.nft-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.price-eth {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.price-usd {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.like-btn {
+  background-color: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.like-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.marketplace-filters select,
+.search-bar input {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.marketplace-filters select:focus,
+.search-bar input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+  color: var(--text-secondary);
+}
+
+.pagination button {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.pagination button:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}

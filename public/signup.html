@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Marketplace - Sign Up</title>
+    <link rel="stylesheet" href="./styles/main.css">
+    <style>
+        .auth-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .error-message {
+            color: #ff0000;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success-message {
+            color: #00aa00;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .auth-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .auth-links a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">NFT Marketplace</div>
+            <ul class="nav-menu">
+                <li><a href="./">Home</a></li>
+                <li><a href="./marketplace.html">Marketplace</a></li>
+                <li><a href="./auctions.html">Auctions</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="auth-container">
+            <h2>Create Your Account</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
+            </form>
+            <div class="auth-links">
+                <a href="./login.html">Already have an account? Login</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#signupForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const username = $('#username').val();
+                const email = $('#email').val();
+                const password = $('#password').val();
+                const confirmPassword = $('#confirmPassword').val();
+
+                // Hide any existing messages
+                $('#errorMessage').hide();
+                $('#successMessage').hide();
+
+                // Basic validation
+                if (password !== confirmPassword) {
+                    $('#errorMessage').text('Passwords do not match').show();
+                    return;
+                }
+
+                // Make API call to signup endpoint
+                $.ajax({
+                    url: '/api/auth/signup',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ username, email, password }),
+                    success: function(response) {
+                        // Show success message
+                        $('#successMessage').text('Account created successfully! Redirecting to login...').show();
+                        
+                        // Redirect to login page after successful signup
+                        setTimeout(function() {
+                            window.location.href = '/login.html';
+                        }, 1500);
+                    },
+                    error: function(xhr) {
+                        // Show error message
+                        const errorMessage = xhr.responseJSON?.message || 'Registration failed. Please try again.';
+                        $('#errorMessage').text(errorMessage).show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

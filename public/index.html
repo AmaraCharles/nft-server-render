@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Marketplace</title>
+    <link rel="stylesheet" href="./styles/main.css">
+    <style>
+        .nav-container {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+        }
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 100;
+        }
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease-in-out;
+        }
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav-menu {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: #fff;
+                box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+                padding: 2rem;
+                transition: right 0.3s ease-in-out;
+            }
+            .nav-menu.active {
+                right: 0;
+            }
+            .nav-menu li {
+                display: block;
+                margin: 1rem 0;
+            }
+            .auth-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">NFT Marketplace</div>
+            <button class="menu-toggle" aria-label="Toggle navigation menu">☰</button>
+            <ul class="nav-menu">
+                <li><a href="./" class="active">Home</a></li>
+                <li><a href="./marketplace.html">Marketplace</a></li>
+                <li><a href="./create.html">Create NFT</a></li>
+                <li><a href="./auctions.html">Auctions</a></li>
+                <li><a href="./profile.html">Profile</a></li>
+                <li><a href="./wallet.html">Wallet</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <button id="connectWallet" class="btn btn-primary">Connect Wallet</button>
+                <button id="loginBtn" class="btn">Login</button>
+                <button id="signupBtn" class="btn">Sign Up</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="hero-section">
+            <h1>Welcome to NFT Marketplace</h1>
+            <p>Discover, collect, and trade unique digital assets</p>
+            <div class="cta-buttons">
+                <a href="./marketplace.html" class="btn btn-primary">Explore</a>
+                <a href="./create.html" class="btn btn-secondary">Create</a>
+            </div>
+        </section>
+
+        <section class="featured-section">
+            <h2>Featured Artworks</h2>
+            <div id="featuredArtworks" class="artwork-grid">
+                <!-- Artwork cards will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section class="live-auctions-section">
+            <h2>Live Auctions</h2>
+            <div id="liveAuctions" class="auction-grid">
+                <!-- Auction cards will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About</h3>
+                <p>A professional NFT marketplace with dual wallet system and auction functionality</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="./marketplace.html">Marketplace</a></li>
+                    <li><a href="./auctions.html">Auctions</a></li>
+                    <li><a href="./create.html">Create NFT</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <ul class="social-links">
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Discord</a></li>
+                    <li><a href="#">Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 NFT Marketplace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="./js/main.js"></script>
+    <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+
+    menuToggle.addEventListener('click', function() {
+        navMenu.classList.toggle('active');
+        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains('active')) {
+            navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+    </script>
+</body>
+</html>

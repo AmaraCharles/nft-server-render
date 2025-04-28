@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - NFT Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #7367f0;
+            --secondary-color: #82868b;
+            --success-color: #28c76f;
+            --info-color: #00cfe8;
+            --warning-color: #ff9f43;
+            --danger-color: #ea5455;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f8f8;
+        }
+
+        .sidebar {
+            background: #283046;
+            min-height: 100vh;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link {
+            color: #d0d2d6;
+            padding: 0.8rem 1rem;
+            margin: 0.2rem 0;
+            border-radius: 0.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 24px 0 rgba(34,41,47,.1);
+        }
+
+        .message-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .message-item {
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .message-item:hover {
+            border-left-color: var(--primary-color);
+            background-color: #f8f9fa;
+        }
+
+        .message-item.unread {
+            background-color: #f8f9fa;
+        }
+
+        .message-item.unread .sender {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #5e50ee;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0 sidebar">
+                <h4 class="text-white mb-4">NFT Admin</h4>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="dashboard.html">
+                        <i class="fas fa-home me-2"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="artworks.html">
+                        <i class="fas fa-images me-2"></i> Artworks
+                    </a>
+                    <a class="nav-link" href="collections.html">
+                        <i class="fas fa-layer-group me-2"></i> Collections
+                    </a>
+                    <a class="nav-link" href="users.html">
+                        <i class="fas fa-users me-2"></i> Users
+                    </a>
+                    <a class="nav-link active" href="messages.html">
+                        <i class="fas fa-envelope me-2"></i> Messages
+                    </a>
+                    <a class="nav-link" href="transactions.html">
+                        <i class="fas fa-exchange-alt me-2"></i> Transactions
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="row mb-4">
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <h2>Messages</h2>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-sync-alt me-2"></i>Refresh
+                            </button>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#composeModal">
+                                <i class="fas fa-pen me-2"></i>Compose
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card animate-fade-in">
+                            <div class="card-body">
+                                <div class="message-list" id="messageList">
+                                    <!-- Messages will be dynamically added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compose Message Modal -->
+    <div class="modal fade" id="composeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Compose Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="composeForm">
+                        <div class="mb-3">
+                            <label class="form-label">To</label>
+                            <div class="recipient-list" style="max-height: 200px; overflow-y: auto;">
+                                <div id="userList" class="list-group"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <input type="text" class="form-control" name="subject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Template</label>
+                            <select class="form-select mb-2" id="emailTemplate" onchange="loadTemplate()">
+                                <option value="default">Default Template</option>
+                                <option value="announcement">Announcement</option>
+                                <option value="update">Platform Update</option>
+                                <option value="welcome">Welcome Message</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" name="message" id="messageContent" rows="8" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="composeForm" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Message Modal -->
+    <div class="modal fade" id="viewMessageModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageSubject"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <strong>From: </strong><span id="messageSender"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Date: </strong><span id="messageDate"></span>
+                    </div>
+                    <div class="mb-3">
+                        <p id="messageContent"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="replyButton">Reply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Email templates
+        const emailTemplates = {
+            default: {
+                subject: '',
+                content: ''
+            },
+            announcement: {
+                subject: '[NFT Marketplace] Important Announcement',
+                content: `Dear [User],
+
+We hope this message finds you well. We wanted to bring to your attention an important announcement regarding our NFT marketplace.
+
+[Your message here]
+
+If you have any questions or concerns, please don't hesitate to reach out to our support team.
+
+Best regards,
+NFT Marketplace Team`
+            },
+            update: {
+                subject: '[NFT Marketplace] Platform Update',
+                content: `Dear [User],
+
+We're excited to announce new updates to our NFT marketplace platform.
+
+[Your message here]
+
+Thank you for being part of our community.
+
+Best regards,
+NFT Marketplace Team`
+            },
+            welcome: {
+                subject: 'Welcome to NFT Marketplace!',
+                content: `Dear [User],
+
+Welcome to our NFT marketplace! We're thrilled to have you join our community.
+
+[Your message here]
+
+If you need any assistance getting started, our support team is here to help.
+
+Best regards,
+NFT Marketplace Team`
+            }
+        };
+
+        // Load email template
+        function loadTemplate() {
+            const template = document.getElementById('emailTemplate').value;
+            const selectedTemplate = emailTemplates[template];
+            
+            if (selectedTemplate) {
+                document.querySelector('input[name="subject"]').value = selectedTemplate.subject;
+                document.getElementById('messageContent').value = selectedTemplate.content;
+            }
+        }
+
+        // Fetch and display messages
+        async function fetchMessages() {
+            try {
+                const response = await fetch('/api/admin/messages');
+                const data = await response.json();
+                
+                const messageList = document.getElementById('messageList');
+                messageList.innerHTML = data.messages.map(message => `
+                    <div class="message-item p-3 ${message.unread ? 'unread' : ''}" onclick="viewMessage('${message.id}')">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="sender">${message.sender}</span>
+                            <small class="text-muted">${new Date(message.date).toLocaleDateString()}</small>
+                        </div>
+                        <h6 class="mb-1">${message.subject}</h6>
+                        <p class="mb-0 text-muted">${message.preview}</p>
+                    </div>
+                `).join('');
+
+                // Update user list
+                const userList = document.getElementById('userList');
+                userList.innerHTML = data.users.map(user => `
+                    <div class="list-group-item">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="recipients" value="${user.id}">
+                            <label class="form-check-label">
+                                <strong>${user.username}</strong><br>
+                                <small class="text-muted">${user.email}</small>
+                            </label>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+            }
+        }
+
+        // View message details
+        async function viewMessage(messageId) {
+            try {
+                const response = await fetch(`/api/admin/messages/${messageId}`);
+                const message = await response.json();
+
+                document.getElementById('messageSubject').textContent = message.subject;
+                document.getElementById('messageSender').textContent = message.sender;
+                document.getElementById('messageDate').textContent = new Date(message.date).toLocaleString();
+                document.getElementById('messageContent').textContent = message.content;
+
+                new bootstrap.Modal(document.getElementById('viewMessageModal')).show();
+            } catch (error) {
+                console.error('Error viewing message:', error);
+            }
+        }
+
+        // Handle message composition
+        document.getElementById('composeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/api/admin/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('composeModal')).hide();
+                    e.target.reset();
+                    fetchMessages();
+                } else {
+                    throw new Error('Failed to send message');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Failed to send message');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', fetchMessages);
+    </script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Templates - NFT Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #7367f0;
+            --secondary-color: #82868b;
+            --success-color: #28c76f;
+            --info-color: #00cfe8;
+            --warning-color: #ff9f43;
+            --danger-color: #ea5455;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f8f8;
+        }
+
+        .sidebar {
+            background: #283046;
+            min-height: 100vh;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link {
+            color: #d0d2d6;
+            padding: 0.8rem 1rem;
+            margin: 0.2rem 0;
+            border-radius: 0.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 24px 0 rgba(34,41,47,.1);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #5e50ee;
+        }
+
+        .template-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .template-item {
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .template-item:hover {
+            border-left-color: var(--primary-color);
+            background-color: #f8f9fa;
+        }
+
+        .editor-container {
+            height: 300px;
+            margin-bottom: 1rem;
+        }
+
+        .placeholder-list {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .placeholder-item {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--info-color);
+            color: white;
+            border-radius: 0.25rem;
+            margin: 0.25rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0 sidebar">
+                <h4 class="text-white mb-4">NFT Admin</h4>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="dashboard.html">
+                        <i class="fas fa-home me-2"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="artworks.html">
+                        <i class="fas fa-images me-2"></i> Artworks
+                    </a>
+                    <a class="nav-link" href="collections.html">
+                        <i class="fas fa-layer-group me-2"></i> Collections
+                    </a>
+                    <a class="nav-link" href="users.html">
+                        <i class="fas fa-users me-2"></i> Users
+                    </a>
+                    <a class="nav-link active" href="templates.html">
+                        <i class="fas fa-envelope-open-text me-2"></i> Templates
+                    </a>
+                    <a class="nav-link" href="messages.html">
+                        <i class="fas fa-envelope me-2"></i> Messages
+                    </a>
+                    <a class="nav-link" href="transactions.html">
+                        <i class="fas fa-exchange-alt me-2"></i> Transactions
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="row mb-4">
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <h2>Message Templates</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTemplateModal">
+                            <i class="fas fa-plus me-2"></i>Create Template
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Template Categories and List -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">Categories</h5>
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action active" data-category="all">
+                                        All Templates
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-category="welcome">
+                                        Welcome Messages
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-category="notification">
+                                        Notifications
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-category="support">
+                                        Support Responses
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body template-list">
+                                <h5 class="card-title mb-3">Templates</h5>
+                                <div id="templateList">
+                                    <!-- Template items will be dynamically added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">Template Editor</h5>
+                                
+                                <!-- Placeholder List -->
+                                <div class="placeholder-list">
+                                    <h6 class="mb-2">Available Placeholders:</h6>
+                                    <div class="placeholder-item" data-placeholder="{{userName}}">
+                                        User Name
+                                    </div>
+                                    <div class="placeholder-item" data-placeholder="{{userEmail}}">
+                                        User Email
+                                    </div>
+                                    <div class="placeholder-item" data-placeholder="{{date}}">
+                                        Current Date
+                                    </div>
+                                    <div class="placeholder-item" data-placeholder="{{orderNumber}}">
+                                        Order Number
+                                    </div>
+                                </div>
+
+                                <!-- Template Form -->
+                                <form id="templateForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Template Name</label>
+                                        <input type="text" class="form-control" id="templateName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Category</label>
+                                        <select class="form-select" id="templateCategory" required>
+                                            <option value="welcome">Welcome Messages</option>
+                                            <option value="notification">Notifications</option>
+                                            <option value="support">Support Responses</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Subject</label>
+                                        <input type="text" class="form-control" id="templateSubject" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Content</label>
+                                        <div id="editor" class="editor-container"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button type="button" class="btn btn-secondary" id="previewBtn">
+                                            <i class="fas fa-eye me-2"></i>Preview
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-2"></i>Save Template
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Template Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <strong>Subject:</strong>
+                        <p id="previewSubject"></p>
+                    </div>
+                    <div>
+                        <strong>Content:</strong>
+                        <div id="previewContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script>
+        // Initialize Quill editor
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Handle placeholder insertion
+        document.querySelectorAll('.placeholder-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const placeholder = item.dataset.placeholder;
+                const range = quill.getSelection(true);
+                quill.insertText(range.index, placeholder, 'user');
+            });
+        });
+
+        // Sample templates data
+        const templates = [
+            {
+                id: 1,
+                name: 'Welcome Email',
+                category: 'welcome',
+                subject: 'Welcome to our NFT Marketplace!',
+                content: 'Dear {{userName}},\n\nWelcome to our NFT marketplace! We\'re excited to have you join our community...'
+            },
+            {
+                id: 2,
+                name: 'Purchase Confirmation',
+                category: 'notification',
+                subject: 'Your NFT Purchase Confirmation',
+                content: 'Dear {{userName}},\n\nThank you for your purchase! Your order #{{orderNumber}} has been confirmed...'
+            }
+        ];
+
+        // Render template list
+        function renderTemplates(category = 'all') {
+            const filteredTemplates = category === 'all' 
+                ? templates 
+                : templates.filter(t => t.category === category);
+
+            const templateList = document.getElementById('templateList');
+            templateList.innerHTML = filteredTemplates.map(template => `
+                <div class="template-item p-3 mb-2" data-id="${template.id}">
+                    <h6 class="mb-1">${template.name}</h6>
+                    <small class="text-muted">${template.category}</small>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            document.querySelectorAll('.template-item').forEach(item => {
+                item.addEventListener('click', () => loadTemplate(item.dataset.id));
+            });
+        }
+
+        // Load template into editor
+        function loadTemplate(id) {
+            const template = templates.find(t => t.id === parseInt(id));
+            if (template) {
+                document.getElementById('templateName').value = template.name;
+                document.getElementById('templateCategory').value = template.category;
+                document.getElementById('templateSubject').value = template.subject;
+                quill.root.innerHTML = template.content.replace(/\n/g, '<br>');
+            }
+        }
+
+        // Handle category filtering
+        document.querySelectorAll('[data-category]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelector('[data-category].active').classList.remove('active');
+                link.classList.add('active');
+                renderTemplates(link.dataset.category);
+            });
+        });
+
+        // Handle template form submission
+        document.getElementById('templateForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const templateData = {
+                name: document.getElementById('templateName').value,
+                category: document.getElementById('templateCategory').value,
+                subject: document.getElementById('templateSubject').value,
+                content: quill.root.innerHTML
+            };
+
+            // Here you would typically save the template to your backend
+            console.log('Saving template:', templateData);
+            alert('Template saved successfully!');
+        });
+
+        // Handle preview
+        document.getElementById('previewBtn').addEventListener('click', () => {
+            const subject = document.getElementById('templateSubject').value;
+            const content = quill.root.innerHTML;
+
+            // Replace placeholders with sample data
+            const previewSubject = subject.replace(/{{userName}}/g, 'John Doe')
+                                        .replace(/{{userEmail}}/g, 'john@example.com')
+                                        .replace(/{{date}}/g, new Date().toLocaleDateString())
+                                        .replace(/{{orderNumber}}/g, '#12345');
+
+            const previewContent = content.replace(/{{userName}}/g, 'John Doe')
+                                        .replace(/{{userEmail}}/g, 'john@example.com')
+                                        .replace(/{{date}}/g, new Date().toLocaleDateString())
+                                        .replace(/{{orderNumber}}/g, '#12345');
+
+            document.getElementById('previewSubject').textContent = previewSubject;
+            document.getElementById('previewContent').innerHTML = previewContent;
+
+            new bootstrap.Modal(document.getElementById('previewModal')).show();
+        });
+
+        // Initialize template list
+        renderTemplates();
+    </script>
+</body>
+</html>

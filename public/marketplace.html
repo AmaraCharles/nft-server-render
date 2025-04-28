@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Marketplace - Browse</title>
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/marketplace.css">
+    <link rel="stylesheet" href="./styles/opensea.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">NFT Marketplace</div>
+            <ul class="nav-menu">
+                <li><a href="./">Home</a></li>
+                <li><a href="./marketplace.html" class="active">Marketplace</a></li>
+                <li><a href="./create.html">Create NFT</a></li>
+                <li><a href="./auctions.html">Auctions</a></li>
+                <li><a href="./profile.html">Profile</a></li>
+                <li><a href="./wallet.html">Wallet</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <button id="connectWallet" class="btn btn-primary">Connect Wallet</button>
+                <button id="loginBtn" class="btn">Login</button>
+                <button id="signupBtn" class="btn">Sign Up</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="marketplace-header">
+            <h1>Browse NFTs</h1>
+            <div class="marketplace-filters">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search NFTs...">
+                </div>
+                <div class="filter-group">
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="art">Art</option>
+                        <option value="photography">Photography</option>
+                        <option value="music">Music</option>
+                        <option value="video">Video</option>
+                        <option value="collectibles">Collectibles</option>
+                        <option value="sports">Sports</option>
+                        <option value="utility">Utility</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <select id="sortFilter">
+                        <option value="recent">Recently Added</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="popular">Most Popular</option>
+                    </select>
+                    <select id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="listed">Listed</option>
+                        <option value="auction">On Auction</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="marketplace-grid" id="nftGrid">
+            <!-- NFT cards will be dynamically inserted here -->
+            <template id="nftCardTemplate">
+                <div class="nft-card">
+                    <div class="nft-image">
+                        <img src="" alt="NFT">
+                        <div class="nft-overlay">
+                            <button class="btn btn-primary buy-btn">Buy Now</button>
+                            <button class="btn btn-secondary like-btn">
+                                <span class="likes-count">0</span> ♥
+                            </button>
+                        </div>
+                    </div>
+                    <div class="nft-info">
+                        <h3 class="nft-title"></h3>
+                        <p class="nft-creator">Created by <span></span></p>
+                        <div class="nft-price">
+                            <div class="price-usd"></div>
+                            <div class="price-eth"></div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </section>
+
+        <div class="pagination">
+            <button id="prevPage" class="btn">Previous</button>
+            <span id="pageInfo">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+            <button id="nextPage" class="btn">Next</button>
+        </div>
+    </main>
+
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Purchase NFT</h2>
+            <div class="purchase-details">
+                <img id="modalNftImage" src="" alt="NFT">
+                <div class="purchase-info">
+                    <h3 id="modalNftTitle"></h3>
+                    <p>Creator: <span id="modalNftCreator"></span></p>
+                    <p>Price: <span id="modalNftPrice"></span></p>
+                    <div class="wallet-selection">
+                        <h4>Select Wallet:</h4>
+                        <select id="walletSelect">
+                            <option value="funded">Funded Wallet</option>
+                            <option value="spot">Spot Wallet</option>
+                        </select>
+                    </div>
+                    <button id="confirmPurchase" class="btn btn-primary">Confirm Purchase</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About</h3>
+                <p>A professional NFT marketplace with dual wallet system and auction functionality</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="./marketplace.html">Marketplace</a></li>
+                    <li><a href="./auctions.html">Auctions</a></li>
+                    <li><a href="./create.html">Create NFT</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <ul class="social-links">
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Discord</a></li>
+                    <li><a href="#">Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 NFT Marketplace. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="./js/marketplace.js"></script>
+</body>
+</html>
