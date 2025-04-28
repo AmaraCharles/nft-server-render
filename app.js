@@ -42,7 +42,7 @@ const authenticateToken = (req, res, next) => {
 
 // Routes
 // Handle user authentication (login, signup, password reset)
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', require('./routes/auth/index'));
 
 // Handle user profile operations (create, update, fetch profiles)
 app.use('/api/users', require('./routes/users'));
