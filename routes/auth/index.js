@@ -87,6 +87,12 @@ router.post('/login',
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
+      console.log('Password comparison details:', {
+        inputPassword: password,
+        storedHash: user.password,
+        saltRounds: process.env.BCRYPT_SALT_ROUNDS || 'default (10)',
+        comparisonResult: isMatch
+      });
       if (!isMatch) {
         console.log('Password comparison failed for user:', user.email);
         console.log('Input password:', password);
