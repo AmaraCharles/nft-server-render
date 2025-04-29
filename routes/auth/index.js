@@ -91,7 +91,10 @@ router.post('/login',
         inputPassword: password,
         storedHash: user.password,
         saltRounds: process.env.BCRYPT_SALT_ROUNDS || 'default (10)',
-        comparisonResult: isMatch
+        comparisonResult: isMatch,
+        hashAlgorithm: user.password.substring(0, 4) === '$2a$' ? 'bcrypt' : 'unknown',
+        hashCost: user.password.split('$')[2] || 'unknown',
+        hashLength: user.password.length
       });
       if (!isMatch) {
         console.log('Password comparison failed for user:', user.email);
