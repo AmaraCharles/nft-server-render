@@ -14,18 +14,8 @@ cloudinary.config({
     api_secret: 'MaULadaPC17bgEHAGjBffD0R2qM'
 });
 
-// Configure multer for memory storage
-const storage = multer.memoryStorage();
-
 // Configure multer for file upload
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/uploads/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname))
-    }
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,

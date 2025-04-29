@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Transaction = require('../models/transaction');
 const NFT = require('../models/NFT');
-const User = require('../models/user');
+const User = require('../models/User');
 const Auction = require('../models/auction');
 
 // Get user's transaction history
