@@ -168,7 +168,12 @@ userSchema.pre('save', async function(next) {
 
 // Method to compare password
 userSchema.methods.comparePassword = async function(candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+  console.log('Comparing passwords:');
+  console.log('Input password:', candidatePassword);
+  console.log('Stored hash:', this.password);
+  const result = await bcrypt.compare(candidatePassword, this.password);
+  console.log('Comparison result:', result);
+  return result;
 };
 
 // Method to update wallet balance
