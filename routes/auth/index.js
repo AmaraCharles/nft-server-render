@@ -88,7 +88,25 @@ router.post('/login',
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid credentials' });
+        console.log('Password comparison failed for user:', user.email);
+        console.log('Input password:', password);
+        console.log('Stored hash:', user.password);
+        console.log('Salt rounds:', process.env.BCRYPT_SALT_ROUNDS || 'default (10)');
+        console.log('JWT secret:', process.env.JWT_SECRET ? 'exists' : 'missing');
+        console.log('Environment variables:', {
+          MONGODB_URI: process.env.MONGODB_URI ? 'exists' : 'missing',
+          JWT_SECRET: process.env.JWT_SECRET ? 'exists' : 'missing',
+          CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME ? 'exists' : 'missing'
+        });
+        console.log('User document:', user);
+        return res.status(400).json({ 
+          message: 'Invalid credentials',
+          debug: {
+            inputEmail: email,
+            storedEmail: user.email,
+            passwordMatch: isMatch
+          }
+        });
       }
 
       const payload = {
