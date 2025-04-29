@@ -5,7 +5,7 @@ let userBalance = 0;
 // Fetch user's NFT collection from the server
 async function fetchUserNFTs() {
     try {
-        const response = await fetch('/api/user/nfts');
+        const response = await fetch('https://nft-server-render.onrender.com/api/user/nfts');
         const data = await response.json();
         userNFTs = data.nfts;
         displayUserNFTs();
@@ -17,7 +17,7 @@ async function fetchUserNFTs() {
 // Fetch user balance
 async function fetchUserBalance() {
     try {
-        const response = await fetch('/api/user/balance');
+        const response = await fetch('https://nft-server-render.onrender.com/api/user/balance');
         const data = await response.json();
         userBalance = data.balance;
         updateBalanceDisplay();
@@ -105,7 +105,7 @@ function showListingModal(nft) {
         }
 
         try {
-            const response = await fetch('/api/nft/list', {
+            const response = await fetch('https://nft-server-render.onrender.com/api/nft/list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -16,7 +16,11 @@ router.post('/register',
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorMessages = errors.array().map(err => `${err.param}: ${err.msg}`);
+        return res.status(400).json({ 
+          message: 'Validation failed', 
+          errors: errorMessages 
+        });
       }
 
       const { email, password, username } = req.body;
@@ -68,7 +72,11 @@ router.post('/login',
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorMessages = errors.array().map(err => `${err.param}: ${err.msg}`);
+        return res.status(400).json({ 
+          message: 'Validation failed', 
+          errors: errorMessages 
+        });
       }
 
       const { email, password } = req.body;
@@ -113,7 +121,11 @@ router.post('/forgot-password',
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorMessages = errors.array().map(err => `${err.param}: ${err.msg}`);
+        return res.status(400).json({ 
+          message: 'Validation failed', 
+          errors: errorMessages 
+        });
       }
 
       const { email } = req.body;
@@ -153,7 +165,11 @@ router.post('/reset-password',
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorMessages = errors.array().map(err => `${err.param}: ${err.msg}`);
+        return res.status(400).json({ 
+          message: 'Validation failed', 
+          errors: errorMessages 
+        });
       }
 
       const { token, password } = req.body;

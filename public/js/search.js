@@ -97,7 +97,7 @@ class NFTSearch {
 
     async handleSearch(query = '') {
         try {
-            const response = await fetch('/api/nfts/search', {
+            const response = await fetch('https://nft-server-render.onrender.com/api/nfts/search', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

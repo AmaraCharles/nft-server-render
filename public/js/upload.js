@@ -53,7 +53,7 @@ function initSingleArtworkForm() {
         formData.append('artwork', form.artwork.files[0]);
 
         try {
-            const response = await fetch('/api/nfts/upload', {
+            const response = await fetch('https://nft-server-render.onrender.com/api/nfts/upload', {
                 method: 'POST',
                 body: formData
             });
@@ -89,7 +89,7 @@ function initCollectionForm() {
         });
 
         try {
-            const response = await fetch('/api/nfts/upload-collection', {
+            const response = await fetch('https://nft-server-render.onrender.com/api/nfts/upload-collection', {
                 method: 'POST',
                 body: formData
             });
