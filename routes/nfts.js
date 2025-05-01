@@ -46,7 +46,7 @@ const uploadToCloudinary = (buffer) => {
 };
 
 // Upload single artwork
-router.post('/upload', authenticateToken, upload.single('artwork'), async (req, res) => {
+router.post('/upload', upload.single('artwork'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
