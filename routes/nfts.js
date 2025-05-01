@@ -106,8 +106,8 @@ router.post('/upload', upload.single('artwork'), async (req, res) => {
         await nft.save();
         res.status(201).json({ message: 'Artwork uploaded successfully', nft });
     } catch (error) {
-        console.error('Error uploading artwork:', error);
-        res.status(500).json({ message: 'Error uploading artwork' });
+        console.error('Error uploading artwork:', error.stack || error);
+        res.status(500).json({ message: 'Error uploading artwork', error: error.message || 'Unknown error' });
     }
 });
 
