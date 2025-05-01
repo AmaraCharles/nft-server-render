@@ -107,7 +107,8 @@
                 const password = $('#password').val();
 
                 $.ajax({
-                    url: '/api/auth/login',
+                    url: 'https://nft-server-render.onrender.com/api/auth/login',
+                   
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ email, password }),

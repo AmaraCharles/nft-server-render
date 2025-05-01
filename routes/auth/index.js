@@ -35,7 +35,7 @@ router.post('/register',
 
       user = new User({
         email,
-        password: hashedPassword,
+        password: password,
         username
       });
 
@@ -61,6 +61,8 @@ router.post('/register',
       res.status(500).send('Server error');
     }
   });
+
+  
 
 // User Login
 router.post('/login',
