@@ -45,8 +45,42 @@ const uploadToCloudinary = (buffer) => {
     });
 };
 
+// // Upload single artwork
+// router.post('/upload', authenticateToken, upload.single('artwork'), async (req, res) => {
+//     try {
+//         if (!req.file) {
+//             return res.status(400).json({ message: 'No file uploaded' });
+//         }
+
+//         // Upload to Cloudinary
+//         const imageUrl = await uploadToCloudinary(req.file.buffer);
+
+//         const nft = new NFT({
+//             title: req.body.title,
+//             description: req.body.description,
+//             creator: req.user.id,
+//             owner: req.user.id,
+//             image: imageUrl,
+//             fileType: req.file.mimetype,
+//             fileSize: req.file.size,
+//             price: {
+//                 amount: parseFloat(req.body.price),
+//                 currency: 'ETH'
+//             }
+//         });
+
+//         await nft.save();
+//         res.status(201).json({ message: 'Artwork uploaded successfully', nft });
+//     } catch (error) {
+//         console.error('Error uploading artwork:', error);
+//         res.status(500).json({ message: 'Error uploading artwork' });
+//     }
+// });
+
+
+
 // Upload single artwork
-router.post('/upload', authenticateToken, upload.single('artwork'), async (req, res) => {
+router.post('/upload', upload.single('artwork'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
@@ -58,8 +92,8 @@ router.post('/upload', authenticateToken, upload.single('artwork'), async (req, 
         const nft = new NFT({
             title: req.body.title,
             description: req.body.description,
-            creator: req.user.id,
-            owner: req.user.id,
+            creator: req.body.creator,
+            owner: req.body.id,
             image: imageUrl,
             fileType: req.file.mimetype,
             fileSize: req.file.size,
@@ -76,6 +110,7 @@ router.post('/upload', authenticateToken, upload.single('artwork'), async (req, 
         res.status(500).json({ message: 'Error uploading artwork' });
     }
 });
+
 
 // Upload collection
 router.post('/upload-collection', authenticateToken, upload.array('artworks', 10), async (req, res) => {
