@@ -132,11 +132,7 @@ router.post('/login',
         { expiresIn: '24h' },
         (err, token) => {
           if (err) throw err;
-          res.json({ token,user: {
-            id: user._id,
-            email: user.email,
-            username: user.username
-          } });
+          res.json({ token });
         }
       );
     } catch (err) {
@@ -145,8 +141,6 @@ router.post('/login',
     }
   });
 
-
-  
 // Password Reset Request
 router.post('/forgot-password',
   [
