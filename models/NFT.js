@@ -20,6 +20,11 @@ const nftSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    author: {
+        type: String,
+        ref: 'User',
+        required: true
+    },
     image: {
         type: String,
         required: true

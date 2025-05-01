@@ -92,9 +92,10 @@ router.post('/upload', upload.single('artwork'), async (req, res) => {
         const nft = new NFT({
             title: req.body.title,
             description: req.body.description,
-            creator: req.body.creator,
+            creator: req.body.id,
             owner: req.body.id,
             image: imageUrl,
+            author:req.body.author,
             fileType: req.file.mimetype,
             fileSize: req.file.size,
             price: {
