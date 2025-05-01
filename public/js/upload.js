@@ -1,17 +1,43 @@
 // Handle file preview for single artwork upload
 function initSingleArtworkPreview() {
-    const artworkInput = document.getElementById('artwork');
-    const preview = document.getElementById('artworkPreview');
+    const artworkInput = document.getElementById('nftImage');
+    const previewImage = document.getElementById('previewImage');
+    const previewVideo = document.getElementById('previewVideo');
+    const previewAudio = document.getElementById('previewAudio');
+    const placeholder = document.querySelector('.preview-placeholder');
 
     artworkInput.addEventListener('change', function() {
         const file = this.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
+                // Hide placeholder
+                placeholder.style.display = 'none';
+                
+                // Hide all preview elements first
+                previewImage.classList.add('d-none');
+                previewVideo.classList.add('d-none');
+                previewAudio.classList.add('d-none');
+
+                // Show appropriate preview based on file type
+                if (file.type.startsWith('image/')) {
+                    previewImage.src = e.target.result;
+                    previewImage.classList.remove('d-none');
+                } else if (file.type.startsWith('video/')) {
+                    previewVideo.src = e.target.result;
+                    previewVideo.classList.remove('d-none');
+                } else if (file.type.startsWith('audio/')) {
+                    previewAudio.src = e.target.result;
+                    previewAudio.classList.remove('d-none');
+                }
             };
             reader.readAsDataURL(file);
+        } else {
+            // Show placeholder if no file selected
+            placeholder.style.display = 'block';
+            previewImage.classList.add('d-none');
+            previewVideo.classList.add('d-none');
+            previewAudio.classList.add('d-none');
         }
     });
 }
@@ -41,19 +67,23 @@ function initCollectionPreview() {
 
 // Handle single artwork form submission
 function initSingleArtworkForm() {
-    const form = document.getElementById('singleArtworkForm');
+    const form = document.getElementById('createNFTForm');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData();
 
-        formData.append('title', form.title.value);
-        formData.append('description', form.description.value);
-        formData.append('price', form.price.value);
-        formData.append('artwork', form.artwork.files[0]);
+        formData.append('title', form.nftName.value);
+        formData.append('description', form.nftDescription.value);
+        formData.append('price', form.nftPrice.value);
+        formData.append('artwork', form.nftImage.files[0]);
+
+        // Log form data and endpoint
+        console.log('Single Artwork Form Data:', Object.fromEntries(formData));
+        console.log('Single Artwork Endpoint:', 'https://nft-server-render.onrender.com/api/nfts/upload');
 
         try {
-            const response = await fetch('https://nft-server-render.onrender.com/api/nfts/upload', {
+            const response = await fetch('/api/nfts/upload', {
                 method: 'POST',
                 body: formData
             });
@@ -65,7 +95,7 @@ function initSingleArtworkForm() {
             const result = await response.json();
             alert('Artwork uploaded successfully!');
             form.reset();
-            document.getElementById('artworkPreview').style.display = 'none';
+            document.getElementById('nftPreview').style.display = 'none';
         } catch (error) {
             console.error('Error uploading artwork:', error);
             alert('Failed to upload artwork. Please try again.');
@@ -88,8 +118,12 @@ function initCollectionForm() {
             formData.append('artworks', file);
         });
 
+        // Log form data and endpoint
+        console.log('Collection Form Data:', Object.fromEntries(formData));
+        console.log('Collection Endpoint:', 'https://nft-server-render.onrender.com/api/nfts/upload-collection');
+
         try {
-            const response = await fetch('https://nft-server-render.onrender.com/api/nfts/upload-collection', {
+            const response = await fetch('/api/nfts/upload-collection', {
                 method: 'POST',
                 body: formData
             });

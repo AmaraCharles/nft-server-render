@@ -50,6 +50,9 @@ app.use('/api/users', require('./routes/users'));
 // Handle artwork operations (create, update, list, buy/sell NFTs)
 app.use('/api/artworks', require('./routes/artworks'));
 
+// Handle NFT operations (upload, create, purchase)
+app.use('/api/nfts', require('./routes/nfts'));
+
 // Handle auction operations (create, bid, end auctions)
 app.use('/api/auctions', require('./routes/auctions'));
 

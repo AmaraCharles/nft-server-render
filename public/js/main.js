@@ -101,3 +101,92 @@ document.addEventListener('DOMContentLoaded', () => {
     initLiveAuctions();
     initWalletConnection();
 });
+
+function initCreateNFTForm() {
+    const createNFTForm = document.getElementById('createNFTForm');
+    const propertiesContainer = document.getElementById('propertiesContainer');
+    const addPropertyBtn = document.getElementById('addProperty');
+
+    if (addPropertyBtn) {
+        addPropertyBtn.addEventListener('click', () => {
+            const propertyRow = document.createElement('div');
+            propertyRow.className = 'property-row d-flex mb-2';
+            propertyRow.innerHTML = `
+                <input type="text" placeholder="Property name" class="form-control me-2 property-name">
+                <input type="text" placeholder="Property value" class="form-control me-2 property-value">
+                <button type="button" class="btn btn-danger remove-property">Remove</button>
+            `;
+            propertiesContainer.appendChild(propertyRow);
+
+            propertyRow.querySelector('.remove-property').addEventListener('click', () => {
+                propertyRow.remove();
+            });
+        });
+    }
+
+    if (createNFTForm) {
+        createNFTForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+
+            // Add file
+            const fileInput = document.getElementById('nftImage');
+            if (fileInput.files.length > 0) {
+                formData.append('image', fileInput.files[0]);
+            }
+
+            // Add basic NFT details
+            formData.append('name', document.getElementById('nftName').value);
+            formData.append('description', document.getElementById('nftDescription').value);
+            formData.append('collection', document.getElementById('nftCollection').value);
+            formData.append('price', document.getElementById('nftPrice').value);
+            formData.append('currency', document.getElementById('nftCurrency').value);
+            formData.append('royalties', document.getElementById('nftRoyalties').value);
+
+            // Add properties
+            const properties = [];
+            document.querySelectorAll('.property-row').forEach(row => {
+                const name = row.querySelector('.property-name').value;
+                const value = row.querySelector('.property-value').value;
+                if (name && value) {
+                    properties.push({ name, value });
+                }
+            });
+            formData.append('properties', JSON.stringify(properties));
+
+            try {
+                const submitButton = createNFTForm.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.innerHTML = 'Creating...';
+
+                const response = await fetch('/api/nfts/create', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                alert('NFT created successfully!');
+                createNFTForm.reset();
+                
+                // Clear properties
+                while (propertiesContainer.firstChild) {
+                    propertiesContainer.removeChild(propertiesContainer.firstChild);
+                }
+                // Add one empty property row
+                addPropertyBtn.click();
+
+            } catch (error) {
+                console.error('Error creating NFT:', error);
+                alert('Failed to create NFT. Please try again.');
+            } finally {
+                const submitButton = createNFTForm.querySelector('button[type="submit"]');
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Create NFT';
+            }
+        });
+    }
+}
