@@ -373,4 +373,15 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Get all NFTs and Artworks
+router.get('/all', async (req, res) => {
+  try {
+    const nfts = await NFT.find({});
+    const artworks = await Artwork.find({});
+    res.json({ nfts, artworks });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
